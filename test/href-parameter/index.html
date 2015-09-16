@@ -29,10 +29,13 @@
         console.log(hrefParameter.create('http://www.qian360.com?abc=123&b=456').get('b'));
 
         // 获取的key是前面key的末尾字符测试,如果正则没写好,获取结果是123,正确的结果应该是456
-        console.log(hrefParameter.create('http://www.qian360.com?abc=123&c=456').get('c'));
+        console.log(hrefParameter.create('http://www.qian360.com?abc=123&c=456&cc=999').get('c'));
 
         // 两个相同key的情况,获得第一个key的值,返回'456'
         console.log(hrefParameter.create('http://www.qian360.com?abc=123&c=456&c=999').get('c'));
+
+        // 设置参数,返回
+        console.log(hrefParameter.create('http://www.qian360.com?abc=123&c=456&c=999').set('c','0000'));
     });
 </script>
 </body>
