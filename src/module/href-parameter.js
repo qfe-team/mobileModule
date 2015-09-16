@@ -1,5 +1,5 @@
 /**
- * href参数读写      1.1.0
+ * href参数读写      1.1.1
  */
 (function (root, factory) {
     if (typeof define === 'function' && (define.amd || define.cmd)) {
@@ -18,14 +18,14 @@
 
             return {
                 get: function (key) {
-                    var patternOne = new RegExp(key + '\\=(.*?)(#|&|$)', 'ig'),
+                    var patternOne = new RegExp('[?|&]' + key + '\\=(.*?)(#|&|$)', 'ig'),
                         patternAll = new RegExp('\\?(.*?)(#|$)', 'ig');
 
-                    if(key){
+                    if (key) {
                         if (patternOne.test(href)) {
                             return RegExp.$1
                         }
-                    }else{
+                    } else {
                         if (patternAll.test(href)) {
                             return RegExp.$1
                         }
