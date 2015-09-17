@@ -1,6 +1,32 @@
-/* 抽奖-老虎机    1.1.0*/
+/**
+ * 抽奖-老虎机      1.2.0
+ *
+ * eg:
+ *
+ * // 初始化抽奖模块
+ *var raffle = new slotMachine({
+ *    awardsArr: [elm0,elm1,elm2],  //必填,循环的元素数组,按顺序点亮
+ *    cycleIndex: 2 //选填,开始定位到目标元素之前的旋转次数,默认为'2'
+ *    currentClass:'on' // 选填,选中元素的class样式,默认为'on'
+ *});
+ *
+ * // 运行抽奖模块
+ * raffle.run(targetNumber,callback);   // 第一个参数是目标元素的id(必填),第二个参数是本次抽奖结束后的回调函数(选填)
+ *
+ * ps:
+ *  1. html上参与抽奖的元素节点上需要增加一个增强属性'data-id'做奖品id
+ *
+ */
 
-define(function (require, exports, module) {
+(function (root, factory) {
+    if (typeof define === 'function' && (define.amd || define.cmd)) {
+        define(function (require, exports, module) {
+            return factory(root,{});
+        });
+    } else {
+        root.Raffle = factory(root,{});
+    }
+})(this, function (root) {
 
     var Raffle = function (opts) {
         this._opts = opts;
@@ -12,6 +38,7 @@ define(function (require, exports, module) {
         //初始化user data
         this.awardsArr = opts.awardsArr;
         this.cycleIndex = opts.cycleIndex || 2;
+        this.currentClass=opts.currentClass || 'on';
 
     };
 
@@ -31,9 +58,9 @@ define(function (require, exports, module) {
             highlight: function (index) {       //奖项高亮显示
                 for (var i = 0; i < awardsArrLength; i++) {
                     if (i !== index) {
-                        self._removeClass.call(null, awardsArr[i], 'on');
+                        self._removeClass.call(null, awardsArr[i], self.currentClass);
                     } else {
-                        self._addClass.call(null, awardsArr[i], 'on');
+                        self._addClass.call(null, awardsArr[i], self.currentClass);
                     }
                 }
             },
