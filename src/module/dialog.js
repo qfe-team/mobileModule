@@ -1,5 +1,5 @@
 /**
- * pop模态框      2.0.5
+ * pop模态框      2.0.6
  */
 (function (root, factory) {
     if (typeof define === 'function' && (define.amd || define.cmd)) {
@@ -131,7 +131,7 @@
         $('#' + ID.confirmBtn + self.guid).on(touchTap, function () {
             confirmFunc && confirmFunc();
             self.close();
-        });
+        }).focus();
 
         // 取消按钮事件
         $('#' + ID.cancelBtn + self.guid).on(touchTap, function () {
