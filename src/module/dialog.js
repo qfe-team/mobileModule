@@ -4,7 +4,7 @@
 (function (root, factory) {
     if (typeof define === 'function' && (define.amd || define.cmd)) {
         define(function (require) {
-            require('zepto');
+            require('jquery');
             return factory(root);
         });
     } else {
