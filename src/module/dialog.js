@@ -1,5 +1,5 @@
 /**
- * pop模态框      2.0.4
+ * pop模态框      2.0.5
  */
 (function (root, factory) {
     if (typeof define === 'function' && (define.amd || define.cmd)) {
@@ -148,8 +148,8 @@
     };
 
     Pop.prototype.close = Pop.prototype.destroy = function () {
-        $('#' + ID.confirmBtn).off(touchTap);
-        $('#' + ID.cancelBtn).off(touchTap);
+        $('#' + ID.confirmBtn + self.guid).off(touchTap);
+        $('#' + ID.cancelBtn + self.guid).off(touchTap);
         $('#' + ID.frame).remove();
     };
     function newGuid() {
