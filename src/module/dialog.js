@@ -1,5 +1,5 @@
 /**
- * pop模态框      2.0.6
+ * pop模态框      2.0.7
  */
 (function (root, factory) {
     if (typeof define === 'function' && (define.amd || define.cmd)) {
@@ -77,7 +77,9 @@
             var strHtml = '';
             strHtml += '<div class="' + CLASS.frame + '" id="' + ID.frame + '">';
             strHtml += '<div class="' + CLASS.main + '">';
-            strHtml += '<div class="' + CLASS.title + '">' + titStr + '</div>';
+            if(titStr){
+                strHtml += '<div class="' + CLASS.title + '">' + titStr + '</div>';
+            }
             strHtml += '<div class="' + CLASS.content + '">' + contStr + '</div>';
             strHtml += '<div class="' + CLASS.operation + '">';
             strHtml += '<a href="javascript:;" id="' + ID.cancelBtn + this.guid + '">取消</a>';
