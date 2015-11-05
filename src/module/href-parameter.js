@@ -1,5 +1,5 @@
 /**
- * href参数读写      1.1.2
+ * href参数读写      1.2.2
  *
  * eg:
  *
@@ -37,6 +37,17 @@
                     var patternOne = new RegExp('[?|&]' + key + '\\=(.*?)(#|&|$)', 'ig'),
                         patternAll = new RegExp('\\?(.*?)(#|$)', 'ig');
 
+                    if (typeof key === 'object') {
+                        var queryObj = {};
+                        if (patternAll.test(href)) {
+                            RegExp.$1.split('&').forEach(function (val) {
+                                var keyValArr = val.split('=');
+                                queryObj[keyValArr[0]] = keyValArr[1];
+                            });
+                        }
+                        return queryObj;
+                    }
+
                     if (key) {
                         if (patternOne.test(href)) {
                             return RegExp.$1
@@ -53,7 +64,7 @@
                 set: function (key, val) {
                     var pattern = '([?|&])' + key + '=[^&]*',
                         replaceText = key + '=' + val,
-                        regResult=href.match(pattern);
+                        regResult = href.match(pattern);
 
                     if (regResult) {
                         return href.replace(regResult[0], regResult[1] + replaceText);
