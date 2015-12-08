@@ -1,11 +1,11 @@
 /**
- * hybrid超链接      1.0.0
+ * hybrid超链接      1.0.1
  * webView情况下超链接使用交互协议
  */
 (function (root, factory) {
     if (typeof define === 'function' && (define.amd || define.cmd)) {
         define(function (require, exports, module) {
-            var hybridProtocol = require('native-calls');
+            var hybridProtocol = require('hybrid-calls');
             return factory(root, hybridProtocol);
         });
     } else {
