@@ -1,5 +1,5 @@
 /**
- * Hybrid交互      1.7.5
+ * Hybrid交互      1.7.6
  * 此模块用来与原生app进行交互
  * 暴露出去一个方法，调用方式如下：
  * hybridProtocol({
@@ -28,17 +28,6 @@
         return 'Don\'t repeat load hybridProtocol!';
     }
 
-    //判断浏览器环境
-    var browser = {
-        versions: function () {
-            var u = navigator.userAgent;
-            return {
-                android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1,
-                ios: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1
-            };
-        }()
-    };
-
     //暴露给原生的对象
     root.Hybrid = {};
 
@@ -50,6 +39,8 @@
     };
 
     hybridProtocol.VERSION='1.7';
+
+    //发送请求
     hybridProtocol.prototype._bridgePostMessage = function () {
         var self=this,
             ifr = document.createElement("iframe");
@@ -79,6 +70,8 @@
                 };
                 url += str + '=' + encodeURIComponent(callbackName) + '&';
             };
+
+        //todo:这个函数的`params`参数,传进来的实参是变量(指针类型),有可能会发生重复编译的情况!
         paramsHandl=(function objectHandl(params){
             for(var key in params){
                 var val=params[key];
@@ -90,6 +83,7 @@
             }
             return params;
         }(self._params));
+
         for (var params in paramsHandl.data) {
             //处理有回调的情况
             if (params =='callback') {
@@ -102,12 +96,12 @@
             }else if(params == 'data'){
                 if(paramsHandl.data[params]){
                     url += params + '=' + JSON.stringify(paramsHandl.data[params]) + '&';
-                    //url += params + '=' + paramsHandl.data[params] + '&';
                 }
             }else{
                 url += params + '=' + paramsHandl.data[params] + '&';
             }
         }
+
         paramsHandl.success && addCallback('success');
         paramsHandl.error && addCallback('error');
 
