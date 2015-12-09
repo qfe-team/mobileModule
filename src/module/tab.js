@@ -1,5 +1,5 @@
 /**
- * tab选项卡      1.0.0
+ * tab选项卡      1.0.1
  */
 (function (root, factory) {
     if (typeof define === 'function' && (define.amd || define.cmd)) {
@@ -38,7 +38,7 @@
 
             opt.$ctrl.on('click', function () {
                 opt.beforeFn && opt.beforeFn();
-                opt.index = $(this).index();
+                opt.itemIndex = $(this).index();
                 that.switchItem();
             });
         },
@@ -48,11 +48,11 @@
             var opt = this.opt;
 
             opt.$ctrl.removeClass(opt.activateCls);
-            opt.$ctrl.eq(opt.index).addClass(opt.activateCls);
+            opt.$ctrl.eq(opt.itemIndex).addClass(opt.activateCls);
             opt.$item.hide();
-            opt.$item.eq(opt.index).show();
+            opt.$item.eq(opt.itemIndex).show();
 
-            opt.afterFn && opt.afterFn(opt.index);
+            opt.afterFn && opt.afterFn(opt.itemIndex);
         }
     };
 
