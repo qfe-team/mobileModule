@@ -1,5 +1,5 @@
 /**
- * hybrid超链接      1.1.1
+ * hybrid超链接      1.2.1
  * webView情况下超链接使用交互协议
  */
 (function (root, factory) {
@@ -29,13 +29,14 @@
         var reg = /^qian\:\/\/(\w+)\?\#?(\w+)?/,
             _this = e.currentTarget,
             linkHref = _this.href;      //a标签的href
-        e.stopPropagation();
-        e.preventDefault();
 
         //不需要处理的a标签
-        if (linkHref === 'javascript:;' || linkHref === '#') {
-            return false;
+        if (linkHref === 'javascript:;' || linkHref === '#' || $(_this).data('hybrid-prevent')) {
+            return true;
         }
+
+        e.stopPropagation();
+        e.preventDefault();
 
         //自定义的链接生成协议
         if (reg.test(linkHref)) {
