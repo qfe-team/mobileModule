@@ -1,5 +1,5 @@
 /**
- * Cookie读写      1.1.0
+ * Cookie读写      1.1.1
  *
  * eg:
  *
@@ -29,17 +29,12 @@
     var Cookie={
 
         // 读取cookie
-        getCookie:function (c_name) {
-            if (document.cookie.length > 1) {
-                var c_start = document.cookie.indexOf(c_name + "=");
-                if (c_start != -1) {
-                    c_start = c_start + c_name.length + 1;
-                    var c_end = document.cookie.indexOf(";", c_start);
-                    if (c_end == -1) c_end = document.cookie.length;
-                    return decodeURI(document.cookie.substring(c_start, c_end));
-                }
+        getCookie:function (name) {
+            var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+            if(arr=document.cookie.match(reg)){
+                return decodeURI(arr[2]);
             }
-            return "";
+            return '';
         },
 
         // 写入cookie
