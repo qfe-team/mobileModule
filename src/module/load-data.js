@@ -1,4 +1,4 @@
-/*数据加载 1.1.0*/
+/*数据加载 1.1.1*/
 (function (root, factory) {
     if (typeof define === 'function' && (define.amd || define.cmd)) {
         define(function (require, exports, module) {
@@ -135,6 +135,10 @@
 
         // 有数据,挂载下拉加载事件
         Event.one("hasData." + eventId, function (data, html) {
+            if (self.currentPage >= getObjVal(data, PAGE_COUNT)) {
+                return false;
+            }
+
             var infinite = new Infinite({
                 box: config.scrollBox[0] || config.container.parent()[0],
                 con: config.container[0],
@@ -156,7 +160,7 @@
                         success: function (data) {
 
                             // 超出总页数
-                            if (self.currentPage > getObjVal(data, PAGE_COUNT)) {
+                            if (self.currentPage >= getObjVal(data, PAGE_COUNT)) {
                                 container.children('.' + CLASS.ING).remove();
                                 return false;
                             }
