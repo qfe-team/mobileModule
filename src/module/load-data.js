@@ -1,4 +1,4 @@
-/*数据加载 1.1.1*/
+/*数据加载 1.1.2*/
 (function (root, factory) {
     if (typeof define === 'function' && (define.amd || define.cmd)) {
         define(function (require, exports, module) {
@@ -29,6 +29,11 @@
             ING: classPrefix + 'ing'
         };
     }());
+
+    // 判断是否存在base模块,base模块中有ajax代理
+    if (typeof base === 'undefined') {
+        var base = $;
+    }
 
 
     var _eventId = 0;       // new出多个实例时保证每个实例事件的独立性
@@ -83,7 +88,7 @@
         // 生成加载中状态
         Event.trigger('loading.' + eventId);
 
-        $.ajax({
+        base.ajax({
             url: config.url,
             async: true,
             data: $.extend(config.sendData, {native_view: base.isApp()}),
@@ -103,6 +108,8 @@
                 html = config.tplFn(data);
 
                 Event.trigger('hasData.' + eventId, data, html);
+
+                self.currentPage++;
             },
             timeout: 10000,
             error: function () {
@@ -129,13 +136,12 @@
                 content.after('<div class="' + CLASS.ING + '">加载中...</div>');
             }
 
-            self.currentPage++;
             callback && callback.call(null, true, data);
         });
 
         // 有数据,挂载下拉加载事件
         Event.one("hasData." + eventId, function (data, html) {
-            if (self.currentPage >= getObjVal(data, PAGE_COUNT)) {
+            if (getObjVal(data, PAGE_COUNT) <= 1) {
                 return false;
             }
 
@@ -148,7 +154,7 @@
                         currentPageObj = {};  // $.extend里直接写对象的话,常量变成普通的字面量输出了,所以先在外面生成对象再放进去
 
                     currentPageObj[PAGE] = self.currentPage;
-                    $.ajax({
+                    base.ajax({
                         url: config.url,
                         type: "post",
                         dataType: "json",
@@ -159,6 +165,9 @@
                         },
                         success: function (data) {
 
+                            var html = config.tplFn(data);
+                            content.append(html);
+
                             // 超出总页数
                             if (self.currentPage >= getObjVal(data, PAGE_COUNT)) {
                                 container.children('.' + CLASS.ING).remove();
@@ -166,8 +175,7 @@
                             }
 
                             self.currentPage++;
-                            var html = config.tplFn(data);
-                            content.append(html);
+
                             isLoading = true;
                         }
                     });
