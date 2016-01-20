@@ -1,12 +1,35 @@
-/*仅存取一次的session 1.0.3*/
-define(function (require, exports, module) {
-    var oneSession={
-        get:function (name) {
-            if(sessionStorage){
-                var sessionVal=sessionStorage.getItem(name);
+/*onSession 1.1.3*/
+
+(function (root, factory) {
+    if (typeof define === 'function' && (define.amd || define.cmd)) {
+        define(function (require, exports, module) {
+            return factory(root);
+        });
+    } else {
+        root.elperBase = factory(root);
+    }
+})(this, function (root) {
+
+    // 是否处于隐私模式下
+    var isPrivacy = (function isPrivacy() {
+        var testKey = 'test',
+            storage = root.sessionStorage;
+        try {
+            storage.setItem(testKey, 'testValue');
+            storage.removeItem(testKey);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    })();
+
+    var oneSession = {
+        get: function (name) {
+            if (root.sessionStorage && isPrivacy) {
+                var sessionVal = sessionStorage.getItem(name);
                 sessionStorage.removeItem(name);
                 return sessionVal;
-            }else{
+            } else {
                 if (document.cookie.length > 1) {
                     var c_start = document.cookie.indexOf(name + "=");
                     if (c_start != -1) {
@@ -19,10 +42,10 @@ define(function (require, exports, module) {
                 return "";
             }
         },
-        set:function(name, value, expiredays) {
-            if(sessionStorage){
+        set: function (name, value, expiredays) {
+            if (root.sessionStorage && isPrivacy) {
                 sessionStorage.setItem(name, value);
-            }else{
+            } else {
                 var exdate = new Date();
                 exdate.setSeconds(exdate.getSeconds() + expiredays);
                 document.cookie = name + "=" + decodeURIComponent(value) +
